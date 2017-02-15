@@ -4,6 +4,7 @@ import createLogger from 'redux-logger'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+
 export function configureStore(initialState) {
     const logger = createLogger();
     const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk, logger)));
@@ -13,6 +14,8 @@ export function configureStore(initialState) {
             store.replaceReducer(nextRootReducer);
         });
     }
+
+
     return store;
 }
 
