@@ -7,12 +7,14 @@ var webpack = require('webpack')
 var autoprefixer = require('autoprefixer')
 var precss = require('precss')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 
 module.exports = {
     devtool: 'cheap-module-eval-source-map',
     entry: [
         'webpack-hot-middleware/client',
         'babel-polyfill',
+        'bootstrap-loader',
         './src/index'
     ],
     resolve: {
@@ -28,12 +30,16 @@ module.exports = {
                 ]
             },
             {
-              test: /\.scss$/,
-                use: ['style-loader', 'css-loader?localIdentName[path][name]--[local]', 'postcss-loader', 'sass-loader']
+                test: /\.scss$/,
+                use: ['style-loader', 'css-loader?localIdentName[path][name]--[local]', 'postcss-loader', 'raw-loader', 'sass-loader']
             },
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader', 'postcss-loader']
+            },
+            {
+                test: /bootstrap\/dist\/js\/umd\//,
+                use: 'imports-loader?jQuery=jquery'
             },
             {
                 test: /bootstrap-sass\/assets\/javascripts\//,
@@ -82,7 +88,22 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.ProvidePlugin({
-            jQuery: 'jquery'
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery",
+            Tether: "tether",
+            "window.Tether": "tether",
+            Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
+            Alert: "exports-loader?Alert!bootstrap/js/dist/alert",
+            Button: "exports-loader?Button!bootstrap/js/dist/button",
+            Carousel: "exports-loader?Carousel!bootstrap/js/dist/carousel",
+            Collapse: "exports-loader?Collapse!bootstrap/js/dist/collapse",
+            Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+            Modal: "exports-loader?Modal!bootstrap/js/dist/modal",
+            Popover: "exports-loader?Popover!bootstrap/js/dist/popover",
+            Scrollspy: "exports-loader?Scrollspy!bootstrap/js/dist/scrollspy",
+            Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
+            Util: "exports-loader?Util!bootstrap/js/dist/util"
         })
     ]
 }
