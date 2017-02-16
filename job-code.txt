@@ -1,0 +1,63 @@
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+
+
+namespace WebJob1
+{
+    // To learn more about Microsoft Azure WebJobs SDK, please see http://go.microsoft.com/fwlink/?LinkID=320976
+    class Program
+    {
+        public static string DownloadString(string url, Encoding encoding, IDictionary<string, string> cookieNameValues)
+        {
+            using (var webClient = new WebClient())
+            {
+                var uri = new Uri(url);
+                var webRequest = WebRequest.Create(uri);
+                foreach (var nameValue in cookieNameValues)
+                {
+                   TryAddCookie(webRequest, new Cookie(nameValue.Key, nameValue.Value, "/", uri.Host));
+                }
+                var response = webRequest.GetResponse();
+                var receiveStream = response.GetResponseStream();
+                var readStream = new StreamReader(receiveStream, encoding);
+                var htmlCode = readStream.ReadToEnd();
+                return htmlCode;
+            }
+        }
+
+        public static bool TryAddCookie(WebRequest webRequest, Cookie cookie)
+        {
+            HttpWebRequest httpRequest = webRequest as HttpWebRequest;
+            if (httpRequest == null)
+            {
+                return false;
+            }
+
+            if (httpRequest.CookieContainer == null)
+            {
+                httpRequest.CookieContainer = new CookieContainer();
+            }
+
+            httpRequest.CookieContainer.Add(cookie);
+            return true;
+        }
+
+        static void Main()
+        {
+
+            var cookieNameValues = new Dictionary<string, string>();
+            cookieNameValues.Add("gts.web.uuid", "550588BB-E26A-4D5D-A501-2801EC2D30BD");
+            cookieNameValues.Add("gts.web.city", "zhytomyr");
+            var htmlResult = DownloadString("https://city.dozor.tech/data?t=2&p=740", Encoding.UTF8, cookieNameValues);
+
+
+
+
+        }
+    }
+}

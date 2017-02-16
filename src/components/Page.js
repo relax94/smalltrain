@@ -4,7 +4,7 @@
 import React, {Component, PropTypes} from 'react'
 import ImagesContainer from './ImagesContainer'
 import {MapContainer} from './MapContainer'
-
+import Routes from './Routes'
 
 const inlineContainerStyles = {
     marginTop: '15px'
@@ -23,7 +23,7 @@ export default class Page extends Component {
 
     render() {
         const {year, photos, fetching, error} = this.props;
-        const years = [2017, 2016, 2015, 2014, 2013, 2012];
+        const years = [2017, 2016];
         return (
                 <div className="row" style={inlineContainerStyles}>
                     <div className="col-md-4">
@@ -43,7 +43,7 @@ export default class Page extends Component {
                                 </div>
                             </div>
                         </div>
-
+                        <Routes/>
                         {error ? <p>Error {error}</p> : ''}
 
                     </div>
