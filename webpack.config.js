@@ -11,12 +11,22 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 
 module.exports = {
     devtool: 'cheap-module-eval-source-map',
-    entry: [
-        'webpack-hot-middleware/client',
-        'babel-polyfill',
-        'bootstrap-loader',
-        './src/index'
-    ],
+    entry: {
+        index: [
+            './src/index'
+        ],
+        vendor: [
+            'webpack-hot-middleware/client',
+            'babel-polyfill',
+            'bootstrap-loader',
+            'react',
+            'react-dom',
+            'react-redux',
+            'react-router',
+            'redux',
+            'redux-thunk'
+        ]
+    },
     resolve: {
         extensions: ['.jsx', '.js', '.json', '.scss']
     },
@@ -83,6 +93,18 @@ module.exports = {
     }
     ,
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vendor',
+            filename: 'vendor.js',
+            minChunks: Infinity
+        }),
+        new webpack.NamedModulesPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: { warnings: false },
+            comments: false,
+            mangle: false,
+            minimize: false
+        }),
         new ExtractTextPlugin('bundle.css'),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),

@@ -1,3 +1,7 @@
+body{
+    background: #edeef0;
+}
+
 .year-header {
     color: green;
 }
@@ -18,3 +22,4 @@
     height: 100px;
     width: 100px;
 }
+

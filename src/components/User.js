@@ -3,26 +3,23 @@
  */
 import React, {Component, PropTypes} from 'react'
 
-export default class User extends  Component{
+export default class User extends Component {
 
-    onLoginBtnClicked(){
+    onLoginBtnClicked() {
         this.props.handleLogin();
     }
-    render(){
-        const {name, error} = this.props;
+
+    render() {
+        const {name} = this.props;
         let template;
 
-        if(name){
+        if (name) {
             template = <p>Hi, {name}</p>
-        }else{
-            template =  <button onClick={::this.onLoginBtnClicked}>Login</button>
+        } else {
+            template = <button className="btn btn-success my-2 my-sm-0" onClick={::this.onLoginBtnClicked}>
+                Login</button>
         }
-        return(
-            <div>
-                {template}
-                {error ? <p>Error {error}</p> : ''}
-            </div>
-        )
+        return template
     }
 }
 

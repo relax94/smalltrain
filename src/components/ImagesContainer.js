@@ -23,6 +23,7 @@ export class ImagesContainer extends Component {
         const {photos, images} = this.props;
         const {updateUserAvatar} = this.props.imagesAction;
         return (
+
             <div className="images-container">
                 {photos.map((entry, index) => {
                     return <ImageItem key={index} index={index} source={entry.src} handleImageItemClick={updateUserAvatar}/>

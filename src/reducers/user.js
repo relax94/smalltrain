@@ -9,7 +9,6 @@ const initialState = {
 }
 
 export default function user(state = initialState, action) {
-    debugger;
     switch (action.type){
         case LOGIN_SUCCESS:
             return {...state, name: action.payload, error: ''};

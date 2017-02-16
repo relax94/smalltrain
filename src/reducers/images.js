@@ -7,7 +7,6 @@ const initialState = {
 }
 
 export default function images(state = initialState, action) {
-    debugger;
     switch (action.type){
         case SHOW_IMAGES:
             return {...state, photos: action.payload};
