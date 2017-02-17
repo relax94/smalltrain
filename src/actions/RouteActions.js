@@ -1,6 +1,6 @@
 import * as RouteType from '../constants/Dozor'
-import {NetworkMethod} from '../constants/Network'
-import {makeRequest} from '../utils/network'
+/*import {NetworkMethod} from '../constants/Network'
+import {makeRequest} from '../utils/network'*/
 
 
 export function getRoutes() {
@@ -8,18 +8,19 @@ export function getRoutes() {
         dispatch({
             type: RouteType.GET_ROUTES_REQUEST
         });
-        makeRequest('', NetworkMethod.GET)
-            .then((response) => {
+     /*   makeRequest('', NetworkMethod.GET)
+            .then((response) => {*/
                 dispatch({
                     type: RouteType.GET_ROUTES_SUCCESS,
-                    payload: response
+                    payload: [{id: 550, label: '1'},{id: 793, label: '19'}]
                 });
-            })
-            .catch(() => {
+          /*  })
+            .catch((err) => {
                 dispatch({
-                    type: RouteType.GET_ROUTES_FAIL
+                    type: RouteType.GET_ROUTES_FAIL,
+                    payload: err
                 });
-            });
+            });*/
     }
 }
 
@@ -30,17 +31,26 @@ export function getRouteDevices(routeId) {
             type: RouteType.GET_ROUTES_DEVICES_REQUEST,
             payload: routeId
         });
-        makeRequest('', NetworkMethod.GET)
-            .then((response) => {
+       /* makeRequest('', NetworkMethod.GET)
+            .then((response) => {*/
                 dispatch({
                     type: RouteType.GET_ROUTES_DEVICES_SUCCESS,
-                    payload: response
+                    payload: ['device1', 'device2']
                 });
-            })
-            .catch(() => {
+         /*   })
+            .catch((err) => {
                 dispatch({
-                    type: RouteType.GET_ROUTES_DEVICES_FAIL
+                    type: RouteType.GET_ROUTES_DEVICES_FAIL,
+                    payload: err
                 })
-            });
+            });*/
+    }
+}
+
+export function addRoutePoint(){
+    return function (dispatch) {
+        dispatch({
+            type: RouteType.ADD_ROUTE_POINT
+        });
     }
 }

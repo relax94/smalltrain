@@ -2,9 +2,10 @@
  * Created by Dmytro.Pavlenko on 15.02.2017.
  */
 import React, {Component, PropTypes} from 'react'
-import ImagesContainer from './ImagesContainer'
-import {MapContainer} from './MapContainer'
-import Routes from './Routes'
+import Images from '../containers/Images'
+import DozorMap from '../containers/DozorMap'
+import Routes from '../containers/Routes'
+import {AddObservePoint} from './AddObservePoint'
 
 const inlineContainerStyles = {
     marginTop: '15px'
@@ -44,6 +45,7 @@ export default class Page extends Component {
                             </div>
                         </div>
                         <Routes/>
+                        <AddObservePoint/>
                         {error ? <p>Error {error}</p> : ''}
 
                     </div>
@@ -55,11 +57,11 @@ export default class Page extends Component {
                             <div className="card-block">
                                 {
                                     fetching ? <p>Loading ....</p>
-                                        : <ImagesContainer photos={photos}/>
+                                        : <Images photos={photos}/>
                                 }
                             </div>
                         </div>
-                        <MapContainer/>
+                        <DozorMap/>
                     </div>
                 </div>
         )

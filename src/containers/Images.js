@@ -2,7 +2,7 @@
  * Created by Dmytro.Pavlenko on 15.02.2017.
  */
 import React, {Component, PropTypes} from 'react'
-import ImageItem from './ImageItem'
+import ImageItem from '../components/ImageItem'
 import Modal from 'react-modal';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -18,7 +18,7 @@ const modalStyles = {
     }
 };
 
-export class ImagesContainer extends Component {
+export class Images extends Component {
     render() {
         const {photos, images} = this.props;
         const {updateUserAvatar} = this.props.imagesAction;
@@ -38,7 +38,7 @@ export class ImagesContainer extends Component {
     }
 }
 
-ImagesContainer.propTypes = {
+Images.propTypes = {
     photos: PropTypes.array.isRequired,
 }
 
@@ -54,4 +54,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImagesContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(Images);

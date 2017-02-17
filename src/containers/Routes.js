@@ -10,25 +10,13 @@ export class Routes extends Component {
         this.state = {activeIndex: -1};
     }
 
+    componentDidMount(){
+        const {getRoutes} = this.props.routesAction;
+        getRoutes();
+    }
+
     render() {
-        let routes = [
-            {
-                id: 550,
-                label: '1'
-            },
-            {
-                id: 550,
-                label: '1'
-            },
-            {
-                id: 550,
-                label: '1'
-            },
-            {
-                id: 550,
-                label: '1'
-            }
-        ];
+        const {routes} = this.props.routes;
         const {getRouteDevices} = this.props.routesAction;
         return (
             <div className="card text-center">
@@ -43,7 +31,6 @@ export class Routes extends Component {
                             onClick={() => {
                                 this.setState({activeIndex: index});
                                 getRouteDevices(item.id);
-                               // this.onYearBtnClick(e);
                             }}>{item.label}</button>)}
                     </div>
                 </div>
@@ -54,7 +41,7 @@ export class Routes extends Component {
 
  function mapStateToProps(state){
     return {
-        devices: state.devices
+        routes: state.routes
     }
 }
 
