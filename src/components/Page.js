@@ -72,6 +72,5 @@ Page.propTypes = {
     year: PropTypes.number.isRequired,
     photos: PropTypes.array.isRequired,
     getPhotos: PropTypes.func.isRequired,
-    addPoint: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired
 }

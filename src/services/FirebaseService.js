@@ -2,6 +2,7 @@ import * as firebase from 'firebase'
 import 'firebase/database';
 
 
+
 let FirebaseSingleton = null;
 export default class FirebaseService {
     constructor(config = this.getDefaultConfig()) {

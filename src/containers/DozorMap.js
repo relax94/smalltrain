@@ -6,42 +6,34 @@ import React, {Component} from 'react'
 import {Map, TileLayer, Marker, Popup} from 'react-leaflet';
 import * as L from 'leaflet'
 import {connect} from 'react-redux';
-import FirebaseService from '../services/FirebaseService'
 import {bindActionCreators} from 'redux'
 import * as routeActions from '../actions/RouteActions'
 import Card from '../components/Card'
 
+
 export class DozorMap extends Component {
-    constructor() {
-        super();
-        this.fs = new FirebaseService();
-        this.state = {devices: [[]], observables: []};
-    }
 
     componentDidMount() {
-        this.fs.subscribe('dozor', this.setDevices.bind(this));
-    }
-
-    setDevices(dozorDevices) {
-        const devices = Object.values(dozorDevices);
-        this.setState({devices});
+        const {getRouteDevices} = this.props.routeActions;
+        getRouteDevices(111);
     }
 
     handleMapClick(e) {
         const {isSelectingObservables} = this.props.routes;
         if (isSelectingObservables) {
-            let extended = this.state.observables;
-            extended.push({lat: e.latlng.lat, lng: e.latlng.lng, loc: e.latlng});
-            this.setState({observables: extended});
-
             const {addObservablePoint} = this.props.routeActions;
-            addObservablePoint(extended);
+            addObservablePoint({lat: e.latlng.lat, lng: e.latlng.lng, loc: e.latlng});
         }
+    }
+
+    removePointBtnClick(index) {
+        const {removeObservablePoint} = this.props.routeActions;
+        removeObservablePoint(index);
     }
 
     render() {
         const position = [50.2590105, 28.6464759];
-        const {devices, observables} = this.state;
+        const {devices, observables} = this.props.routes;
         const markers =
             (devices.map(device => device.map(bus => <Marker position={bus.loc} icon={
                     L.divIcon({
@@ -54,14 +46,15 @@ export class DozorMap extends Component {
             );
 
         const observableMarkers = (
-            observables.map((point) => <Marker position={point.loc} icon={
-                L.divIcon({
-                    className: 'observable-marker',
-                    iconSize: [50, 50]
-                })
-            }>
-                <Popup children={<p>{point.lat}</p>}/>
-            </Marker>));
+            observables.map((point) =>
+                <Marker position={point.loc} icon={
+                    L.divIcon({
+                        className: 'observable-marker',
+                        iconSize: [50, 50]
+                    })
+                }>
+                    <Popup children={<p>{point.lat}</p>}/>
+                </Marker>));
 
 
         return (
@@ -80,9 +73,12 @@ export class DozorMap extends Component {
                 </Map>
                 <ul className="list-group">
                     {observables.map((item, index) =>
+
                         <li className="list-group-item justify-content-between">
-                            Point#{++index}
-                            <span className="badge badge-default badge-pill">X</span>
+                            Point# {item.lat}
+                            <span className="badge badge-default badge-pill" onClick={() => {
+                                this.removePointBtnClick(index);
+                            }}>X</span>
                         </li>
                     )}
                 </ul>

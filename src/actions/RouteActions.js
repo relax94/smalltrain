@@ -32,19 +32,13 @@ export function getRouteDevices(routeId) {
             type: RouteType.GET_ROUTES_DEVICES_REQUEST,
             payload: routeId
         });
-       /* makeRequest('', NetworkMethod.GET)
-            .then((response) => {*/
-                dispatch({
-                    type: RouteType.GET_ROUTES_DEVICES_SUCCESS,
-                    payload: ['device1', 'device2']
-                });
-         /*   })
-            .catch((err) => {
-                dispatch({
-                    type: RouteType.GET_ROUTES_DEVICES_FAIL,
-                    payload: err
-                })
-            });*/
+
+        FS.subscribe('dozor', (dozorDevices) => {
+            dispatch({
+                type: RouteType.GET_ROUTES_DEVICES_SUCCESS,
+                payload: Object.values(dozorDevices)
+            });
+        });
     }
 }
 
@@ -66,11 +60,20 @@ export function selecting(isSelecting) {
     }
 }
 
-export function addObservablePoint(points) {
+export function removeObservablePoint(index){
+    return function(dispatch){
+        dispatch({
+            type: RouteType.REMOVE_OBSERVABLE_POINT,
+            payload: index
+        })
+    }
+}
+
+export function addObservablePoint(point) {
     return function (dispatch) {
         dispatch({
             type: RouteType.ADD_OBSERVABLE_POINT,
-            payload: points
+            payload: point
         })
     }
 }
