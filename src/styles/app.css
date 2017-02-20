@@ -28,8 +28,14 @@ body{
     margin-bottom: 15px;
 }
 
-.my-div-icon{
-    height: 50px;
-    width: 50px;
+.dozor-point-marker{
     content: url("../assets/images/mark.png");
+}
+
+.observable-marker{
+    content: url("../assets/images/observable-marker.png");
+}
+
+#point-actions button{
+    margin-left: 10px;
 }

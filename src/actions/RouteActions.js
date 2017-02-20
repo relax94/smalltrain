@@ -57,3 +57,20 @@ export function addRoutePoint(point){
         });
     }
 }
+
+export function selecting(isSelecting) {
+    return function(dispatch){
+        dispatch({
+            type: isSelecting ? RouteType.START_SELECTING_OBSERVABLES : RouteType.STOP_SELECTING_OBSERVABLES
+        })
+    }
+}
+
+export function addObservablePoint(points) {
+    return function (dispatch) {
+        dispatch({
+            type: RouteType.ADD_OBSERVABLE_POINT,
+            payload: points
+        })
+    }
+}

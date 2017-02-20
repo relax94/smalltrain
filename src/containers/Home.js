@@ -6,16 +6,15 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import Page from '../components/Page'
 import * as pageActions from '../actions/PageActions'
-import * as routesActions from '../actions/RouteActions'
+
 
 export class Home extends Component{
     render(){
         const {page} = this.props;
         const { getPhotos } = this.props.pageActions;
-        const {addRoutePoint} = this.props.routeActions;
         return (
             <div>
-                <Page year={page.year} photos={page.photos} getPhotos={getPhotos} addPoint={addRoutePoint} fetching={page.fetching} error={page.error} />
+                <Page year={page.year} photos={page.photos} getPhotos={getPhotos}  fetching={page.fetching} error={page.error} />
             </div>
         )
     }
@@ -29,8 +28,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return{
-        pageActions: bindActionCreators(pageActions, dispatch),
-        routeActions: bindActionCreators(routesActions, dispatch)
+        pageActions: bindActionCreators(pageActions, dispatch)
     }
 }
 

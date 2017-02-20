@@ -5,7 +5,7 @@ import React, {Component, PropTypes} from 'react'
 import Images from '../containers/Images'
 import DozorMap from '../containers/DozorMap'
 import Routes from '../containers/Routes'
-import {AddObservePoint} from './AddObservePoint'
+import AddObservePoint from '../containers/AddObservePoint'
 
 const inlineContainerStyles = {
     marginTop: '15px'
@@ -23,7 +23,7 @@ export default class Page extends Component {
     }
 
     render() {
-        const {year, photos, fetching, error, addPoint} = this.props;
+        const {year, photos, fetching, error} = this.props;
         const years = [2017, 2016];
         return (
                 <div className="row" style={inlineContainerStyles}>
@@ -45,7 +45,7 @@ export default class Page extends Component {
                             </div>
                         </div>
                         <Routes/>
-                        <AddObservePoint addObservePoint={addPoint}/>
+                        <AddObservePoint/>
                         {error ? <p>Error {error}</p> : ''}
 
                     </div>

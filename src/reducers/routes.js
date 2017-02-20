@@ -3,8 +3,10 @@ import * as Route from '../constants/Dozor'
 const initialRoute = {
     routes: [],
     devices: [],
+    observables: [],
     error: '',
-    fetching: false
+    fetching: false,
+    isSelectingObservables: false
 }
 
 export default function routes(state = initialRoute, action) {
@@ -21,6 +23,12 @@ export default function routes(state = initialRoute, action) {
             return {...state, error: action.payload};
         case Route.ADD_ROUTE_POINT:
             return {...state};
+        case Route.ADD_OBSERVABLE_POINT:
+            return {...state, observables: action.payload};
+        case Route.START_SELECTING_OBSERVABLES:
+            return {...state, isSelectingObservables: true};
+        case Route.STOP_SELECTING_OBSERVABLES:
+            return {...state, isSelectingObservables: false};
         default:
             return state;
 

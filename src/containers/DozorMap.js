@@ -7,13 +7,15 @@ import {Map, TileLayer, Marker, Popup} from 'react-leaflet';
 import * as L from 'leaflet'
 import {connect} from 'react-redux';
 import FirebaseService from '../services/FirebaseService'
-/*import {bindActionCreators} from 'redux'*/
+import {bindActionCreators} from 'redux'
+import * as routeActions from '../actions/RouteActions'
+import Card from '../components/Card'
 
 export class DozorMap extends Component {
     constructor() {
         super();
         this.fs = new FirebaseService();
-        this.state = {devices: [[]]};
+        this.state = {devices: [[]], observables: []};
     }
 
     componentDidMount() {
@@ -22,50 +24,69 @@ export class DozorMap extends Component {
 
     setDevices(dozorDevices) {
         const devices = Object.values(dozorDevices);
-        console.log('DEV ', devices);
         this.setState({devices});
+    }
+
+    handleMapClick(e) {
+        const {isSelectingObservables} = this.props.routes;
+        if (isSelectingObservables) {
+            let extended = this.state.observables;
+            extended.push({lat: e.latlng.lat, lng: e.latlng.lng, loc: e.latlng});
+            this.setState({observables: extended});
+
+            const {addObservablePoint} = this.props.routeActions;
+            addObservablePoint(extended);
+        }
     }
 
     render() {
         const position = [50.2590105, 28.6464759];
-       // const markerPosition = [50.2590105, 28.6464759];
-        /*   const {devices} = this.props.routes;*/
-        const {devices} = this.state;
+        const {devices, observables} = this.state;
         const markers =
             (devices.map(device => device.map(bus => <Marker position={bus.loc} icon={
-                L.divIcon({
-                    className: 'my-div-icon',
-                    iconSize: [50,50]
-                })
+                    L.divIcon({
+                        className: 'dozor-point-marker',
+                        iconSize: [50, 50]
+                    })
                 }>
-                    <Popup children={<p>{bus.gNb}</p>} />
+                    <Popup children={<p>{bus.gNb}</p>}/>
                 </Marker>))
             );
-        return (
 
-            <div className="card text-center">
-                <div className="card-header">
-                    <small>Map View</small>
-                </div>
-                <div className="card-block">
-                    {/*       {devices.map(device => device.map(bus => <p>{bus.gNb}</p>))}*/}
-                    <Map
-                        style={{height: '400px'}}
-                        center={position} zoom={13}>
-                        <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                        />
-                       {/* <Marker
-                            position={markerPosition}
-                            ref='marker'>
-                            <Popup minWidth={90}>
-                            </Popup>
-                        </Marker>*/}
-                        {markers}
-                    </Map>
-                </div>
-            </div>
+        const observableMarkers = (
+            observables.map((point) => <Marker position={point.loc} icon={
+                L.divIcon({
+                    className: 'observable-marker',
+                    iconSize: [50, 50]
+                })
+            }>
+                <Popup children={<p>{point.lat}</p>}/>
+            </Marker>));
+
+
+        return (
+            <Card headerLabel={'Map View'}>
+                <Map
+                    ref='map'
+                    style={{height: '400px'}}
+                    center={position} zoom={13}
+                    onClick={::this.handleMapClick}>
+                    <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                    />
+                    {markers}
+                    {observableMarkers}
+                </Map>
+                <ul className="list-group">
+                    {observables.map((item, index) =>
+                        <li className="list-group-item justify-content-between">
+                            Point#{++index}
+                            <span className="badge badge-default badge-pill">X</span>
+                        </li>
+                    )}
+                </ul>
+            </Card>
         )
     }
 }
@@ -76,6 +97,13 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(DozorMap);
+function mapDispatchToProps(dispatch) {
+    return {
+        routeActions: bindActionCreators(routeActions, dispatch)
+    }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DozorMap);
 
 
