@@ -19,6 +19,8 @@ export default function routes(state = initialRoute, action) {
             return {...state, fetching: true};
         case Route.GET_ROUTES_FAIL:
             return {...state, error: action.payload};
+        case Route.ADD_ROUTE_POINT:
+            return {...state};
         default:
             return state;
 

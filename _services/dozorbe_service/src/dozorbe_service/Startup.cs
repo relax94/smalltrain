@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using dozorbe_service.Services;
 using dozorbe_service.Interfaces;
+using Firebase.Database;
 
 namespace dozorbe_service
 {
@@ -29,6 +30,8 @@ namespace dozorbe_service
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+ 
         }
 
         public IConfigurationRoot Configuration { get; }

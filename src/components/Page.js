@@ -23,7 +23,7 @@ export default class Page extends Component {
     }
 
     render() {
-        const {year, photos, fetching, error} = this.props;
+        const {year, photos, fetching, error, addPoint} = this.props;
         const years = [2017, 2016];
         return (
                 <div className="row" style={inlineContainerStyles}>
@@ -45,7 +45,7 @@ export default class Page extends Component {
                             </div>
                         </div>
                         <Routes/>
-                        <AddObservePoint/>
+                        <AddObservePoint addObservePoint={addPoint}/>
                         {error ? <p>Error {error}</p> : ''}
 
                     </div>
@@ -72,5 +72,6 @@ Page.propTypes = {
     year: PropTypes.number.isRequired,
     photos: PropTypes.array.isRequired,
     getPhotos: PropTypes.func.isRequired,
+    addPoint: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired
 }

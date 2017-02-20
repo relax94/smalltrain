@@ -27,3 +27,9 @@ body{
 .card{
     margin-bottom: 15px;
 }
+
+.my-div-icon{
+    height: 50px;
+    width: 50px;
+    content: url("../assets/images/mark.png");
+}

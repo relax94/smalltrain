@@ -1,7 +1,8 @@
 import * as RouteType from '../constants/Dozor'
+import FirebaseService from '../services/FirebaseService'
 /*import {NetworkMethod} from '../constants/Network'
 import {makeRequest} from '../utils/network'*/
-
+const FS = new FirebaseService();
 
 export function getRoutes() {
     return function (dispatch) {
@@ -47,10 +48,12 @@ export function getRouteDevices(routeId) {
     }
 }
 
-export function addRoutePoint(){
+export function addRoutePoint(point){
     return function (dispatch) {
+        FS.writeData(point);
         dispatch({
-            type: RouteType.ADD_ROUTE_POINT
+            type: RouteType.ADD_ROUTE_POINT,
+            payload: point
         });
     }
 }
