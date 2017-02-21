@@ -74,7 +74,7 @@ export class DozorMap extends Component {
                 <ul className="list-group">
                     {observables.map((item, index) =>
 
-                        <li className="list-group-item justify-content-between">
+                        <li key={index} className="list-group-item justify-content-between">
                             Point# {item.lat}
                             <span className="badge badge-default badge-pill" onClick={() => {
                                 this.removePointBtnClick(index);

@@ -34,14 +34,14 @@ export class AddObservePoint extends Component {
         return (
             <Card headerLabel="Add observe point">
                 <div className="form-group row">
-                    <label for="example-text-input" className="col-3 col-form-label">Label</label>
+                    <label htmlFor="example-text-input" className="col-3 col-form-label">Label</label>
                     <div className="col-9">
                         <input className="form-control" type="text" name="label" onChange={::this.handleFormInputs}
                                id="example-text-input"/>
                     </div>
                 </div>
                 <div className="form-group row">
-                    <label for="example-search-input" className="col-3 col-form-label">Vibrate</label>
+                    <label htmlFor="example-search-input" className="col-3 col-form-label">Vibrate</label>
                     <div className="col-9">
                         <input className="form-control" type="search" name="vibrateDuration"
                                onChange={::this.handleFormInputs}
