@@ -33,7 +33,7 @@ export class DozorMap extends Component {
 
     render() {
         const position = [50.2590105, 28.6464759];
-        const {devices, observables} = this.props.routes;
+        const {devices, observables, checkpointAlerts} = this.props.routes;
         const markers =
             (devices.map(device => device.map(bus => <Marker position={bus.loc} icon={
                     L.divIcon({
@@ -74,9 +74,9 @@ export class DozorMap extends Component {
                 <ul className="list-group">
                     {observables.map((item, index) =>
 
-                        <li key={index} className="list-group-item justify-content-between">
+                        <li key={index} className={'list-group-item justify-content-between ' + (checkpointAlerts.find(a => a.observerId === index) ? 'active' : '')}>
                             Point# {item.lat}
-                            <span className="badge badge-default badge-pill" onClick={() => {
+                            <span key={index} className="badge badge-default badge-pill" onClick={() => {
                                 this.removePointBtnClick(index);
                             }}>X</span>
                         </li>

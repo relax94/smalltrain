@@ -5,23 +5,29 @@ const initialRoute = {
     routes: [],
     devices: [],
     observables: [],
-    checkpointAlerts: [],
+    checkpointAlerts: {},
     error: '',
     fetching: false,
     isSelectingObservables: false
 }
 
 export default function routes(state = initialRoute, action) {
-    debugger;
     switch (action.type) {
         case Route.GET_ROUTES_REQUEST:
             return {...state, fetching: true};
         case Route.GET_ROUTES_SUCCESS:
             return {...state, routes: action.payload};
-        case Route.GET_ROUTES_DEVICES_SUCCESS: // Logic to update devices observables
-            return {...state, devices: action.payload, checkpointAlerts: state.observables.map((obs) => {
-                return state.devices[0].filter(dev => Utils.distanceBetweenXY(obs, dev.loc) < 1000);
-            })};
+        case Route.GET_ROUTES_DEVICES_SUCCESS: { // Logic to update devices observables
+            // HARDCODE TO TEST SOME LOGIC
+            let checkountPointsCandidates = [];
+            state.observables.map((obs, observerId) => {
+                let query = state.devices[0].filter(dev => Utils.distanceBetweenXY(obs, dev.loc) < 50 && !checkountPointsCandidates.includes(dev));
+                if(query.length > 0)
+                    checkountPointsCandidates.push({observerId: observerId, devices: query});
+                return;
+            });
+            return {...state, devices: action.payload, checkpointAlerts: checkountPointsCandidates};
+        }
         case Route.GET_ROUTES_DEVICES_REQUEST:
             return {...state, fetching: true};
         case Route.GET_ROUTES_FAIL:

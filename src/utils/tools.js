@@ -22,6 +22,6 @@ export function distanceBetweenXY(pointFrom, pointTo) {
 
     var d = R * c;
 
-    console.log(`Distance ${d}`);
+   // console.log(`Distance ${d}`);
     return d;
 }
