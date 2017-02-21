@@ -7,7 +7,7 @@ namespace dozorbe_service.Models
 {
     public class DozorOutput
     {
-        public int rId { get; set; }
+        //public int rId { get; set; }
         public List<DozorDevice> dvs { get; set; }
     }
 }

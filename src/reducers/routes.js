@@ -5,7 +5,7 @@ const initialRoute = {
     routes: [],
     devices: [],
     observables: [],
-    checkpointAlerts: {},
+    checkpointAlerts: [],
     error: '',
     fetching: false,
     isSelectingObservables: false
