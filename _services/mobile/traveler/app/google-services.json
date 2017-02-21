@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "699029039624",
+    "firebase_url": "https://citytracker-26373.firebaseio.com",
+    "project_id": "citytracker-26373",
+    "storage_bucket": "citytracker-26373.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699029039624:android:a9b12eeb76c8d2df",
+        "android_client_info": {
+          "package_name": "com.example.dmitrypavlenko.traveler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "699029039624-0tgc37ccqksrnouuh528r0br2k91rkom.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvz9s1_slb4Tf-9k13DgfKgJQZcludCAE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
