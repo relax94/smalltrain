@@ -21,7 +21,7 @@ export default function routes(state = initialRoute, action) {
             // HARDCODE TO TEST SOME LOGIC
             let checkountPointsCandidates = [];
             state.observables.map((obs, observerId) => {
-                let query = state.devices[0].filter(dev => Utils.distanceBetweenXY(obs, dev.loc) < 50 && !checkountPointsCandidates.includes(dev));
+                let query = state.devices[0].filter(dev => Utils.distanceBetweenXY(obs, dev.loc) < 250 && !checkountPointsCandidates.includes(dev));
                 if(query.length > 0)
                     checkountPointsCandidates.push({observerId: observerId, devices: query});
                 return;
