@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Firebase.Database.Query;
 
 namespace dozorbe_service.Controllers
 {
@@ -23,9 +24,11 @@ namespace dozorbe_service.Controllers
         {
             var dozorResponse = await this._dozorService.ScrapDozorData(routeId);
             var firebase = new FirebaseClient("https://citytracker-26373.firebaseio.com");
-             await firebase
-              .Child("dozor")
-              .PutAsync<DozorOutput>(dozorResponse.data.FirstOrDefault());
+            await firebase
+                .Child("dozor")
+                .Child("740")
+                .PutAsync<DozorResponse>(dozorResponse);
+
             return Ok(dozorResponse);
         }
 

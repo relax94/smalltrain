@@ -6,24 +6,44 @@ import android.bluetooth.le.ScanResult;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dmitrypavlenko.traveler.Interfaces.OnDatabaseDataMove;
+import com.example.dmitrypavlenko.traveler.Models.Dozor.DozorResponse;
+import com.example.dmitrypavlenko.traveler.Models.User.User;
+import com.example.dmitrypavlenko.traveler.Services.FirebaseService;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.zhaoxiaodan.miband.ActionCallback;
 import com.zhaoxiaodan.miband.MiBand;
 import com.zhaoxiaodan.miband.model.VibrationMode;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends AppCompatActivity implements OnDatabaseDataMove {
 
     private MiBand miband;
+    @BindView(R.id.connectBtn) Button connectBtn;
+    @BindView(R.id.statusTextView)TextView statusTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
          miband = new MiBand(this);
+        ButterKnife.bind(this);
         this.connectToMiBand();
+
+       FirebaseService fs =  new FirebaseService();
+        fs.listen("users", this, User.class);
+        fs.listen("dozor", this, DozorResponse.class);
+
     }
 
     private void connectToMiBand(){
@@ -54,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void  readFromFirebase(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("user");
+    @Override
+    public void onDatabaseDataMove() {
+
     }
 }
