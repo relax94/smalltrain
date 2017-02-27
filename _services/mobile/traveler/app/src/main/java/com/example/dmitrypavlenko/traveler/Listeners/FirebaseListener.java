@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,21 +23,17 @@ import java.util.List;
 
 public class FirebaseListener<T> implements ValueEventListener {
 
-    public static String FL_TAG ="FIREBASE_LISTENER";
-    private OnDatabaseDataMove onDatabaseDataMove;
-    private GenericTypeIndicator<T> genericType;
+    public static String LOG_TAG ="FIREBASE_LISTENER";
     private Class<T> clazz;
 
-    public FirebaseListener(OnDatabaseDataMove onDatabaseDataMove, Class<T> clazz){
-        this.onDatabaseDataMove = onDatabaseDataMove;
-        this.genericType = new GenericTypeIndicator<T>(){};
+    public FirebaseListener( Class<T> clazz){
         this.clazz = clazz;
     }
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        T response = dataSnapshot.getValue(this.clazz);
-        this.onDatabaseDataMove.onDatabaseDataMove(); // DEPRECATED (Put Event System)
+        T response = dataSnapshot.getChildren().iterator().next().getValue(this.clazz);// REWRITE TO FULL MODEL
+        EventBus.getDefault().post(response);
     }
 
     @Override

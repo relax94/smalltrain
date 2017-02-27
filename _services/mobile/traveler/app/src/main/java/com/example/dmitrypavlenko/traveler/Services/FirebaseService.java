@@ -19,8 +19,8 @@ public class FirebaseService {
         this.database = FirebaseDatabase.getInstance();
     }
 
-    public <T> void listen(String childName, OnDatabaseDataMove callback, Class<T> clazz){
-         database.getReference(childName).addValueEventListener(new FirebaseListener<>(callback, clazz));
+    public <T> void listen(String childName,  Class<T> clazz){
+         database.getReference(childName).addValueEventListener(new FirebaseListener<>( clazz));
     }
 
 }

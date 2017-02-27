@@ -23,35 +23,38 @@ import com.zhaoxiaodan.miband.ActionCallback;
 import com.zhaoxiaodan.miband.MiBand;
 import com.zhaoxiaodan.miband.model.VibrationMode;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements OnDatabaseDataMove {
+public class MainActivity extends AppCompatActivity {
 
     private MiBand miband;
-    @BindView(R.id.connectBtn) Button connectBtn;
-    @BindView(R.id.statusTextView)TextView statusTextView;
+    @BindView(R.id.connectBtn)
+    Button connectBtn;
+    @BindView(R.id.statusTextView)
+    TextView statusTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         miband = new MiBand(this);
+        miband = new MiBand(this);
         ButterKnife.bind(this);
         this.connectToMiBand();
 
-       FirebaseService fs =  new FirebaseService();
-        fs.listen("users", this, User.class);
-        fs.listen("dozor", this, DozorResponse.class);
+        FirebaseService fs = new FirebaseService();
+        fs.listen("users", User.class);
+        fs.listen("dozor", DozorResponse.class);
 
     }
 
-    private void connectToMiBand(){
-        final ScanCallback scanCallback = new ScanCallback()
-        {
+    private void connectToMiBand() {
+        final ScanCallback scanCallback = new ScanCallback() {
             @Override
-            public void onScanResult(int callbackType, ScanResult result)
-            {
+            public void onScanResult(int callbackType, ScanResult result) {
                 BluetoothDevice device = result.getDevice();
                 connectDevice(device);
             }
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnDatabaseDataMov
         MiBand.startScan(scanCallback);
     }
 
-    private void connectDevice(BluetoothDevice device){
+    private void connectDevice(BluetoothDevice device) {
         miband.connect(device, new ActionCallback() {
             @Override
             public void onSuccess(Object data) {
@@ -74,8 +77,25 @@ public class MainActivity extends AppCompatActivity implements OnDatabaseDataMov
 
     }
 
-    @Override
-    public void onDatabaseDataMove() {
+    @Subscribe
+    public void onDozorDataMove(DozorResponse dozorResponse) {
 
+    }
+
+    @Subscribe
+    public void onUserDataMove(User user) {
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
