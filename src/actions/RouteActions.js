@@ -34,9 +34,10 @@ export function getRouteDevices(routeId) {
         });
 
         FS.subscribe('dozor', (dozorDevices) => {
+            debugger;
             dispatch({
                 type: RouteType.GET_ROUTES_DEVICES_SUCCESS,
-                payload: Object.values(dozorDevices)
+                payload: Object.values(dozorDevices['740'].data[0])
             });
             //calculateDistanceBetweenCheckpoints();
         });
