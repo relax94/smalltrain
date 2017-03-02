@@ -11,7 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dmitrypavlenko.traveler.Application.TravelerApplication;
+import com.example.dmitrypavlenko.traveler.Events.DeviceActionResultEvent;
+import com.example.dmitrypavlenko.traveler.Events.ScanDevicesResultEvent;
 import com.example.dmitrypavlenko.traveler.Interfaces.OnDatabaseDataMove;
+import com.example.dmitrypavlenko.traveler.Listeners.BluetoothDevicesListener;
+import com.example.dmitrypavlenko.traveler.Listeners.DeviceActionCallbackListener;
 import com.example.dmitrypavlenko.traveler.Models.Dozor.DozorDevice;
 import com.example.dmitrypavlenko.traveler.Models.Dozor.DozorResponse;
 import com.example.dmitrypavlenko.traveler.Models.User.ObservablePoint;
@@ -53,12 +57,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TravelerApplication.getComponent().inject(this);
-        miband = new MiBand(this);
         ButterKnife.bind(this);
-
-        //  this.fs = new FirebaseService();
-
-
+        this.miband = new MiBand(this);
         this.connectToMiBand();
 
     }
@@ -70,30 +70,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void connectToMiBand() {
-        final ScanCallback scanCallback = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult result) {
-                BluetoothDevice device = result.getDevice();
-                connectDevice(device);
-            }
-        };
-        MiBand.startScan(scanCallback);
+        MiBand.startScan(new BluetoothDevicesListener());
+    }
+
+    @Subscribe
+    public void onScanDevicesEventResult(ScanDevicesResultEvent scanDevicesResultEvent){
+        if(scanDevicesResultEvent != null)
+            connectDevice(scanDevicesResultEvent.getBluetoothDevice());
     }
 
     private void connectDevice(BluetoothDevice device) {
-        miband.connect(device, new ActionCallback() {
-            @Override
-            public void onSuccess(Object data) {
-                //  statusTextView.setText("Success Connecting");
-                fs.listen("users", User.class);
-            }
+        miband.connect(device, new DeviceActionCallbackListener());
+    }
 
-            @Override
-            public void onFail(int errorCode, String msg) {
-
-            }
-        });
-
+    @Subscribe
+    public void onActionDeviceResult(DeviceActionResultEvent deviceActionResultEvent){
+        if(deviceActionResultEvent != null)
+            fs.listen("users", User.class);
     }
 
     @Subscribe
