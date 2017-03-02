@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dmitrypavlenko.traveler.Application.TravelerApplication;
 import com.example.dmitrypavlenko.traveler.Interfaces.OnDatabaseDataMove;
 import com.example.dmitrypavlenko.traveler.Models.Dozor.DozorDevice;
 import com.example.dmitrypavlenko.traveler.Models.Dozor.DozorResponse;
@@ -31,6 +32,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -43,16 +46,17 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.statusTextView)
     TextView statusTextView;
     private User userData;
-    private FirebaseService fs;
+    @Inject FirebaseService fs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TravelerApplication.getComponent().inject(this);
         miband = new MiBand(this);
         ButterKnife.bind(this);
 
-        this.fs = new FirebaseService();
+        //  this.fs = new FirebaseService();
 
 
         this.connectToMiBand();
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.connectBtn)
-    public void onConnectBtnClicked(){
+    public void onConnectBtnClicked() {
 
     }
 
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         miband.connect(device, new ActionCallback() {
             @Override
             public void onSuccess(Object data) {
-              //  statusTextView.setText("Success Connecting");
+                //  statusTextView.setText("Success Connecting");
                 fs.listen("users", User.class);
             }
 
@@ -99,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
     final ArrayList<ObservablePoint> candidates = new ArrayList<>();
 
-    private void calculateDistances(DozorResponse dozorResponse){
+    private void calculateDistances(DozorResponse dozorResponse) {
 
-        for(ObservablePoint observablePoint: this.userData.getObservables()) {
-            for(DozorDevice device:  dozorResponse.getData().get(0).getDvs()){
+        for (ObservablePoint observablePoint : this.userData.getObservables()) {
+            for (DozorDevice device : dozorResponse.getData().get(0).getDvs()) {
                 ObservablePoint devicePoint = device.getLoc();
                 double distance = Utils.distanceBetweenXY(observablePoint, devicePoint);
-                if(distance < 300  && !candidates.contains(devicePoint))
+                if (distance < 300 && !candidates.contains(devicePoint))
                     miband.startVibration(VibrationMode.VIBRATION_WITH_LED);
             }
         }
