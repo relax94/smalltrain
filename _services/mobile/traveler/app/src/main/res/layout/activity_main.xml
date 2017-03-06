@@ -19,6 +19,12 @@
         android:layout_marginTop="53dp"
         android:id="@+id/connectBtn" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/g_sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
