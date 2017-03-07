@@ -13,27 +13,60 @@ import Card from '../components/Card'
 
 export class DozorMap extends Component {
 
+    constructor() {
+        super();
+        this.state = {observables: []};
+    }
+
     componentDidMount() {
         const {getRouteDevices} = this.props.routeActions;
         getRouteDevices(111);
     }
 
     handleMapClick(e) {
+        this.setState({
+            observables: this.state.observables.concat({
+                lat: e.latlng.lat,
+                lng: e.latlng.lng,
+                loc: e.latlng
+            })
+        });
+    }
+
+    applyAddingObservablePoint(observableId) {
         const {isSelectingObservables} = this.props.routes;
         if (isSelectingObservables) {
             const {addObservablePoint} = this.props.routeActions;
-            addObservablePoint({lat: e.latlng.lat, lng: e.latlng.lng, loc: e.latlng});
+            addObservablePoint({
+                ...this.state.observables[observableId],
+                label: this.state.label,
+                duration: this.state.duration
+            });
         }
     }
 
+    handlePointDetailsChanges(e) {
+        const controlName = e.target.name;
+        const value = e.target.value;
+        this.setState({[controlName]: value});
+    }
+
+    removePointFromLocalState(index) {
+        this.setState({
+            observables: this.state.observables.filter((el, it) => it !== index)
+        });
+    }
+
     removePointBtnClick(index) {
+        this.removePointFromLocalState(index);
         const {removeObservablePoint} = this.props.routeActions;
         removeObservablePoint(index);
     }
 
     render() {
         const position = [50.2590105, 28.6464759];
-        const {devices, observables, checkpointAlerts} = this.props.routes;
+        const {devices, checkpointAlerts} = this.props.routes;
+        const {observables} = this.state;
         const markers =
             (devices.map(device => device.map(bus => <Marker position={bus.loc} icon={
                     L.divIcon({
@@ -74,11 +107,32 @@ export class DozorMap extends Component {
                 <ul className="list-group">
                     {observables.map((item, index) =>
 
-                        <li key={index} className={'list-group-item justify-content-between ' + (checkpointAlerts.find(a => a.observerId === index) ? 'active' : '')}>
+                        <li key={index}
+                            className={'list-group-item justify-content-between ' + (checkpointAlerts.find(a => a.observerId === index) ? 'active' : '')}
+                        >
                             Point# {item.lat}
-                            <span key={index} className="badge badge-default badge-pill" onClick={() => {
-                                this.removePointBtnClick(index);
-                            }}>X</span>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <input type="text" name="label" className="form-control"
+                                           onChange={::this.handlePointDetailsChanges}/>
+                                </div>
+                                <div className="col-md-4">
+                                    <input type="text" name="duration" className="form-control"
+                                           onChange={::this.handlePointDetailsChanges}/>
+                                </div>
+                                <div className="col-md-2">
+                                    <button className="btn btn-primary" onClick={() => {
+                                        this.applyAddingObservablePoint(index);
+                                    }}>OK
+                                    </button>
+                                </div>
+                                <div className="col-md-2">
+                                    <button className="btn btn-danger" onClick={() => {
+                                        this.removePointBtnClick(index);
+                                    }}>Remove
+                                    </button>
+                                </div>
+                            </div>
                         </li>
                     )}
                 </ul>
