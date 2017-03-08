@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Firebase.Database.Query;
+using dozorbe_service.Jobs;
+using Hangfire;
+using dozorbe_service.Jobs.Services;
 
 namespace dozorbe_service.Controllers
 {
@@ -19,17 +22,24 @@ namespace dozorbe_service.Controllers
             _dozorService = dozorService;
         }
 
-        [HttpGet("/api/dozor/data")]
+        [HttpGet("/api/dozor/scheduler/start")]
         public async Task<IActionResult> GetDozorScrapedData(int routeId)
         {
-            var dozorResponse = await this._dozorService.ScrapDozorData(routeId);
-            var firebase = new FirebaseClient("https://citytracker-26373.firebaseio.com");
-            await firebase
-                .Child("dozor")
-                .Child("740")
-                .PutAsync<DozorResponse>(dozorResponse);
+            var dozorResponseTask = await this._dozorService.ScrapDozorData(1);
+            await new FirebaseClient("https://citytracker-26373.firebaseio.com")
+               .Child("dozor")
+               .Child("740")
+               .PutAsync<DozorResponse>(dozorResponseTask);
 
-            return Ok(dozorResponse);
+
+            return Ok(dozorResponseTask);
+        }
+
+        public void BeFunc()
+        {
+            RecurringJob.AddOrUpdate(
+    () => BeFunc(),
+    Cron.Minutely);
         }
 
     }

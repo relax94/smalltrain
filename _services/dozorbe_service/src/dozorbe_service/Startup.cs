@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 using dozorbe_service.Services;
 using dozorbe_service.Interfaces;
 using Firebase.Database;
+using Hangfire;
+using Hangfire.MemoryStorage;
+using dozorbe_service.Controllers;
 
 namespace dozorbe_service
 {
@@ -43,6 +46,10 @@ namespace dozorbe_service
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddScoped<IDozorService, DozorService>();
 
+            services.AddHangfire(config =>
+    config.UseMemoryStorage());
+
+            services.AddTransient<DozorController, DozorController>();
             services.AddMvc();
         }
 
@@ -55,6 +62,10 @@ namespace dozorbe_service
             app.UseApplicationInsightsRequestTelemetry();
 
             app.UseApplicationInsightsExceptionTelemetry();
+
+            app.UseHangfireServer();
+
+
 
             app.UseMvc();
         }
