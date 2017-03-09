@@ -22,7 +22,7 @@ export default function routes(state = initialRoute, action) {
             let checkountPointsCandidates = [];
             state.observables.map((obs, observerId) => {
                 let query = state.devices[0].filter(dev => Utils.distanceBetweenXY(obs, dev.loc) < 250 && !checkountPointsCandidates.includes(dev));
-                if(query.length > 0)
+                if (query.length > 0)
                     checkountPointsCandidates.push({observerId: observerId, devices: query});
                 return;
             });
@@ -36,6 +36,12 @@ export default function routes(state = initialRoute, action) {
             return {...state, isSelectingObservables: false};
         case Route.ADD_OBSERVABLE_POINT:
             return {...state, observables: state.observables.concat(action.payload)}; //???? NO NO NO
+        case Route.UPDATE_OBSERVABLE_POINT: {
+            const {index, point} = action.payload;
+            let updated = state.observables;
+            updated[index] = point;
+            return {...state, observables: updated};
+        }
         case Route.REMOVE_OBSERVABLE_POINT:
             return {...state, observables: state.observables.filter((it, index) => index !== action.payload)}; //???? NO NO NO
         case Route.START_SELECTING_OBSERVABLES:

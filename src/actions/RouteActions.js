@@ -87,3 +87,12 @@ export function addObservablePoint(point) {
         })
     }
 }
+
+export function updateObservablePoint(index, point) {
+    return function (dispatch) {
+        dispatch({
+            type: RouteType.UPDATE_OBSERVABLE_POINT,
+            payload: {index, point}
+        })
+    }
+}
