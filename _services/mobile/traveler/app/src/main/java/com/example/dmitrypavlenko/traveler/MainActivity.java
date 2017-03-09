@@ -115,8 +115,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 ObservablePoint devicePoint = device.getLoc();
                 double distance = Utils.distanceBetweenXY(observablePoint, devicePoint);
                 if (distance < 300 && !candidates.contains(devicePoint))
-                    miband.startVibration(VibrationMode.VIBRATION_WITH_LED);
+                    this.vibrateWhile(observablePoint.getDuration());
             }
+        }
+    }
+
+    private void vibrateWhile(int restrictCount){
+        for(int i = 0; i < restrictCount; i++){
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            miband.startVibration(VibrationMode.VIBRATION_WITH_LED);
+                        }
+                    },
+                    i * 1000);
         }
     }
 

@@ -7,6 +7,24 @@ package com.example.dmitrypavlenko.traveler.Models.User;
 public class ObservablePoint {
     private float lat;
     private float lng;
+    private String label;
+    private int duration;
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
     private ObservablePoint loc;
 
