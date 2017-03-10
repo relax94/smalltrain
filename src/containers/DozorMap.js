@@ -78,11 +78,11 @@ export class DozorMap extends Component {
                     {markers}
                     {observableMarkers}
                 </Map>
-                <ul className="list-group">
+                <div className="observable-points-list" id="accordion" role="tablist" aria-multiselectable="true">
                     {observables.map((item, index) =>
                         <DozorObservablePoint routes={this.props.routes} routeActions={this.props.routeActions} item={item} index={index} isAlert={checkpointAlerts.find(a => a.observerId === index)}/>
                     )}
-                </ul>
+                </div>
             </Card>
         )
     }
