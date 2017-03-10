@@ -34,10 +34,21 @@ export function getRouteDevices(routeId) {
         });
 
         FS.subscribe('dozor', (dozorDevices) => {
-            debugger;
             dispatch({
                 type: RouteType.GET_ROUTES_DEVICES_SUCCESS,
                 payload: Object.values(dozorDevices['740'].data[0])
+            });
+            //calculateDistanceBetweenCheckpoints();
+        });
+    }
+}
+
+export function getObservablePoints() {
+    return function (dispatch) {
+        FS.subscribe('users', (users) => {
+            dispatch({
+                type: RouteType.GET_OBSERVABLE_POINTS,
+                payload: users['123'].observables
             });
             //calculateDistanceBetweenCheckpoints();
         });

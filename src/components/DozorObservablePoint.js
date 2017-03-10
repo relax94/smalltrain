@@ -27,7 +27,7 @@ export class DozorObservablePoint extends Component {
         const {item, index, isAlert} = this.props;
         return (
 
-            <div key={index} className={'card ' + (isAlert ? 'active' : '')}>
+            <div key={index} className="card">
                 <div className="card-header" role="tab" id={'heading' + index}>
                     <h5 className="mb-0">
                         <a className="collapsed" data-toggle="collapse" data-parent="#accordion"
@@ -35,6 +35,7 @@ export class DozorObservablePoint extends Component {
                            aria-expanded="false" aria-controls="collapseThree">
                             Point# {item.label || item.lat}
                         </a>
+                        {isAlert ? <span className="custom-alert">Active</span> : ''}
                     </h5>
                 </div>
                 <div id={'collapse' + index} className="collapse" role="tabpanel" aria-labelledby={'heading' + index}>
