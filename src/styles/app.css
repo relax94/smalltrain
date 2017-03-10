@@ -39,3 +39,7 @@ body{
 #point-actions button{
     margin-left: 10px;
 }
+
+.observable-points-list{
+    margin-top: 15px;
+}
