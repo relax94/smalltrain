@@ -43,3 +43,8 @@ body{
 .observable-points-list{
     margin-top: 15px;
 }
+
+.custom-alert{
+    float: right;
+    color: red;
+}

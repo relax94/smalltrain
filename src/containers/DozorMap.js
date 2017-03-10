@@ -20,8 +20,9 @@ export class DozorMap extends Component {
     }
 
     componentDidMount() {
-        const {getRouteDevices} = this.props.routeActions;
+        const {getRouteDevices, getObservablePoints} = this.props.routeActions;
         getRouteDevices(111);
+        getObservablePoints();
     }
 
     handleMapClick(e) {
