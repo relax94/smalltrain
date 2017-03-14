@@ -8,7 +8,7 @@ public class ObservablePoint {
     private float lat;
     private float lng;
     private String label;
-    private int duration;
+    private String duration;
 
     public String getLabel() {
         return label;
@@ -19,10 +19,10 @@ public class ObservablePoint {
     }
 
     public int getDuration() {
-        return duration;
+        return Integer.parseInt(duration);
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 

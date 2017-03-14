@@ -23,6 +23,7 @@ import com.example.dmitrypavlenko.traveler.Models.Dozor.DozorResponse;
 import com.example.dmitrypavlenko.traveler.Models.User.ObservablePoint;
 import com.example.dmitrypavlenko.traveler.Models.User.User;
 import com.example.dmitrypavlenko.traveler.Services.FirebaseService;
+import com.example.dmitrypavlenko.traveler.Tools.Basic;
 import com.example.dmitrypavlenko.traveler.Tools.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -109,26 +110,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     final ArrayList<ObservablePoint> candidates = new ArrayList<>();
 
     private void calculateDistances(DozorResponse dozorResponse) {
-
+        candidates.clear();
         for (ObservablePoint observablePoint : this.userData.getObservables()) {
             for (DozorDevice device : dozorResponse.getData().get(0).getDvs()) {
                 ObservablePoint devicePoint = device.getLoc();
                 double distance = Utils.distanceBetweenXY(observablePoint, devicePoint);
                 if (distance < 300 && !candidates.contains(devicePoint))
-                    this.vibrateWhile(observablePoint.getDuration());
+                    candidates.add(observablePoint);
             }
         }
+
+        for(int i = 0; i < candidates.size(); i++)
+            vibrateWhile(candidates.get(i).getDuration());
     }
 
     private void vibrateWhile(int restrictCount){
         for(int i = 0; i < restrictCount; i++){
-            new android.os.Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
-                            miband.startVibration(VibrationMode.VIBRATION_WITH_LED);
-                        }
-                    },
-                    i * 1000);
+            Basic.setTimeout(new Runnable() {
+                public void run() {
+                    miband.startVibration(VibrationMode.VIBRATION_WITH_LED);
+                }
+            }, i * 3000);
         }
     }
 
