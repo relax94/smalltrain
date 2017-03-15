@@ -57,10 +57,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private GoogleApiClient mGoogleApiClient;
 
     private MiBand miband;
-    @BindView(R.id.connectBtn)
-    Button connectBtn;
-    @BindView(R.id.statusTextView)
-    TextView statusTextView;
     private User userData;
     @Inject FirebaseService fs;
 
@@ -76,10 +72,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    @OnClick(R.id.connectBtn)
-    public void onConnectBtnClicked() {
-        Toast.makeText(this, "On Connect clicked", Toast.LENGTH_SHORT).show();
-    }
 
 
     private void connectToMiBand() {
