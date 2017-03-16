@@ -26,6 +26,8 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'com.android.support:design:25.2.0'
     testCompile 'junit:junit:4.12'
     compile 'com.zhaoxiaodan.miband:miband-sdk:1.1.2'
     compile 'com.jakewharton:butterknife:8.5.1'

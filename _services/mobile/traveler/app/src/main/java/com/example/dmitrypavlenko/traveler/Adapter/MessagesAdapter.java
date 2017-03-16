@@ -21,6 +21,7 @@ import com.example.dmitrypavlenko.traveler.Helpers.CircleTransform;
 import com.example.dmitrypavlenko.traveler.Helpers.FlipAnimator;
 import com.example.dmitrypavlenko.traveler.Models.User.ObservablePoint;
 import com.example.dmitrypavlenko.traveler.R;
+import com.example.dmitrypavlenko.traveler.Tools.Basic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,31 +93,31 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        ObservablePoint message = messages.get(position);
+        ObservablePoint point = messages.get(position);
 
         // displaying text view data
-       /* holder.from.setText(message.getFrom());
-        holder.subject.setText(message.getSubject());
-        holder.message.setText(message.getMessage());
-        holder.timestamp.setText(message.getTimestamp());
+        holder.from.setText(point.getLabel());
+        holder.subject.setText(point.getLabel());
+        holder.message.setText(point.getLabel());
+        //holder.timestamp.setText(message.getTimestamp());
 
         // displaying the first letter of From in icon text
-        holder.iconText.setText(message.getFrom().substring(0, 1));*/
+        holder.iconText.setText(point.getLabel().substring(0,1));
 
         // change the row state to activated
         holder.itemView.setActivated(selectedItems.get(position, false));
 
         // change the font style depending on message read status
-        applyReadStatus(holder, message);
+        applyReadStatus(holder, point);
 
         // handle message star
-        applyImportant(holder, message);
+        applyImportant(holder, point);
 
         // handle icon animation
         applyIconAnimation(holder, position);
 
         // display profile image
-        applyProfilePicture(holder, message);
+        applyProfilePicture(holder, point);
 
         // apply click events
         applyClickEvents(holder, position);
@@ -155,7 +156,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     }
 
     private void applyProfilePicture(MyViewHolder holder, ObservablePoint message) {
-       /* if (!TextUtils.isEmpty(message.getPicture())) {
+/*        if (!TextUtils.isEmpty(message.getPicture())) {
             Glide.with(mContext).load(message.getPicture())
                     .thumbnail(0.5f)
                     .crossFade()
@@ -164,11 +165,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
                     .into(holder.imgProfile);
             holder.imgProfile.setColorFilter(null);
             holder.iconText.setVisibility(View.GONE);
-        } else {
+        } else {*/
             holder.imgProfile.setImageResource(R.drawable.bg_circle);
-            holder.imgProfile.setColorFilter(message.getColor());
+           // holder.imgProfile.setColorFilter(Basic);
             holder.iconText.setVisibility(View.VISIBLE);
-        }*/
+        //}
     }
 
     private void applyIconAnimation(MyViewHolder holder, int position) {
@@ -209,17 +210,17 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
     @Override
     public long getItemId(int position) {
-        return 1;
+        return position;
     }
 
     private void applyImportant(MyViewHolder holder, ObservablePoint message) {
-     /*   if (message.isImportant()) {
+/*        if (message.isImportant()) {
             holder.iconImp.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_black_24dp));
             holder.iconImp.setColorFilter(ContextCompat.getColor(mContext, R.color.icon_tint_selected));
-        } else {
-            holder.iconImp.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_border_black_24dp));
-            holder.iconImp.setColorFilter(ContextCompat.getColor(mContext, R.color.icon_tint_normal));
-        }*/
+        } else {*/
+           // holder.iconImp.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_border_black_24dp));
+           // holder.iconImp.setColorFilter(ContextCompat.getColor(mContext, R.color.icon_tint_normal));
+       // }
     }
 
     private void applyReadStatus(MyViewHolder holder, ObservablePoint message) {

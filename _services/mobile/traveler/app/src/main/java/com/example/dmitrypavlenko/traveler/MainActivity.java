@@ -5,16 +5,25 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dmitrypavlenko.traveler.Adapter.MessagesAdapter;
 import com.example.dmitrypavlenko.traveler.Application.TravelerApplication;
 import com.example.dmitrypavlenko.traveler.Events.DeviceActionResultEvent;
 import com.example.dmitrypavlenko.traveler.Events.ScanDevicesResultEvent;
+import com.example.dmitrypavlenko.traveler.Helpers.DividerItemDecoration;
 import com.example.dmitrypavlenko.traveler.Interfaces.OnDatabaseDataMove;
 import com.example.dmitrypavlenko.traveler.Listeners.BluetoothDevicesListener;
 import com.example.dmitrypavlenko.traveler.Listeners.DeviceActionCallbackListener;
@@ -44,6 +53,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -51,7 +61,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
+ SwipeRefreshLayout.OnRefreshListener, MessagesAdapter.MessageAdapterListener{
 
     private final int RC_SIGN_IN = 123;
     private GoogleApiClient mGoogleApiClient;
@@ -60,6 +71,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private User userData;
     @Inject FirebaseService fs;
 
+    private List<ObservablePoint> messages = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private MessagesAdapter mAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+   // private ActionModeCallback actionModeCallback;
+    private ActionMode actionMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +85,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         TravelerApplication.getComponent().inject(this);
         ButterKnife.bind(this);
         this.miband = new MiBand(this);
-        this.connectToMiBand();
+        this.initUI();
         this.testGoogleSignInInit();
 
     }
 
+    private void initUI(){
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
+        mAdapter = new MessagesAdapter(this, messages, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setAdapter(mAdapter);
+
+       // actionModeCallback = new ActionModeCallback();
+
+        // show loader and fetch messages
+        swipeRefreshLayout.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        connectToMiBand();
+                    }
+                }
+        );
+    }
 
     private void connectToMiBand() {
         MiBand.startScan(new BluetoothDevicesListener());
@@ -129,8 +170,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Subscribe
     public void onUserDataMove(User user) {
         this.userData = user;
+        messages.addAll(user.getObservables());
+        mAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
         this.fs.listen("dozor", DozorResponse.class);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_search) {
+            Toast.makeText(getApplicationContext(), "Search...", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onStart() {
@@ -183,5 +251,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } else {
 
         }
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onIconClicked(int position) {
+
+    }
+
+    @Override
+    public void onIconImportantClicked(int position) {
+
+    }
+
+    @Override
+    public void onMessageRowClicked(int position) {
+
+    }
+
+    @Override
+    public void onRowLongClicked(int position) {
+
     }
 }
