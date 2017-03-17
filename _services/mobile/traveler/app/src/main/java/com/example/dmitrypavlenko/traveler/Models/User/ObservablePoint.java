@@ -9,6 +9,15 @@ public class ObservablePoint {
     private float lng;
     private String label;
     private String duration;
+    private boolean active;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     public String getLabel() {
         return label;

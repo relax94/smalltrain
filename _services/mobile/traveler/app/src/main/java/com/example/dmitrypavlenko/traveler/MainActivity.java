@@ -148,13 +148,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             for (DozorDevice device : dozorResponse.getData().get(0).getDvs()) {
                 ObservablePoint devicePoint = device.getLoc();
                 double distance = Utils.distanceBetweenXY(observablePoint, devicePoint);
-                if (distance < 300 && !candidates.contains(devicePoint))
+                if (distance < 300 && !candidates.contains(devicePoint)) {
+                    observablePoint.setActive(true);
                     candidates.add(observablePoint);
+                }
             }
         }
 
-        for(int i = 0; i < candidates.size(); i++)
+        for(int i = 0; i < candidates.size(); i++) {
             vibrateWhile(candidates.get(i).getDuration());
+        }
     }
 
     private void vibrateWhile(int restrictCount){
@@ -170,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Subscribe
     public void onUserDataMove(User user) {
         this.userData = user;
+        // clear and refresh
         messages.addAll(user.getObservables());
         mAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
