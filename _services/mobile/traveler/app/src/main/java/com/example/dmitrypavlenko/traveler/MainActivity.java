@@ -143,6 +143,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     final ArrayList<ObservablePoint> candidates = new ArrayList<>();
 
+    private void addToCandidates(ObservablePoint point){
+
+    }
+
+
     private void calculateDistances(DozorResponse dozorResponse) {
         candidates.clear();
         for (ObservablePoint observablePoint : this.userData.getObservables()) {
@@ -158,10 +163,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         if (candidates.size() > 0) {
             this.messages.clear();
-            this.mAdapter.notifyDataSetChanged();
             this.messages.addAll(this.userData.getObservables());
+            this.mAdapter.notifyDataSetChanged();
             for (int i = 0; i < candidates.size(); i++) {
-                vibrateWhile(candidates.get(i).getDuration());
+                final int candidateId = i;
+                Basic.setTimeout(new Runnable() {
+                    public void run() {
+                        vibrateWhile(candidates.get(candidateId).getDuration());
+                    }
+                }, candidateId * 10000);
             }
         }
     }
