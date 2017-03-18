@@ -62,20 +62,21 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
- SwipeRefreshLayout.OnRefreshListener, MessagesAdapter.MessageAdapterListener{
+        SwipeRefreshLayout.OnRefreshListener, MessagesAdapter.MessageAdapterListener {
 
     private final int RC_SIGN_IN = 123;
     private GoogleApiClient mGoogleApiClient;
 
     private MiBand miband;
     private User userData;
-    @Inject FirebaseService fs;
+    @Inject
+    FirebaseService fs;
 
     private List<ObservablePoint> messages = new ArrayList<>();
     private RecyclerView recyclerView;
     private MessagesAdapter mAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-   // private ActionModeCallback actionModeCallback;
+    // private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
 
     @Override
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    private void initUI(){
+    private void initUI() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
 
-       // actionModeCallback = new ActionModeCallback();
+        // actionModeCallback = new ActionModeCallback();
 
         // show loader and fetch messages
         swipeRefreshLayout.post(
@@ -120,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     @Subscribe
-    public void onScanDevicesEventResult(ScanDevicesResultEvent scanDevicesResultEvent){
-        if(scanDevicesResultEvent != null)
+    public void onScanDevicesEventResult(ScanDevicesResultEvent scanDevicesResultEvent) {
+        if (scanDevicesResultEvent != null)
             connectDevice(scanDevicesResultEvent.getBluetoothDevice());
     }
 
@@ -130,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     @Subscribe
-    public void onActionDeviceResult(DeviceActionResultEvent deviceActionResultEvent){
-        if(deviceActionResultEvent != null)
+    public void onActionDeviceResult(DeviceActionResultEvent deviceActionResultEvent) {
+        if (deviceActionResultEvent != null)
             fs.listen("users", User.class);
     }
 
@@ -155,13 +156,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         }
 
-        for(int i = 0; i < candidates.size(); i++) {
-            vibrateWhile(candidates.get(i).getDuration());
+        if (candidates.size() > 0) {
+            this.messages.clear();
+            this.mAdapter.notifyDataSetChanged();
+            this.messages.addAll(this.userData.getObservables());
+            for (int i = 0; i < candidates.size(); i++) {
+                vibrateWhile(candidates.get(i).getDuration());
+            }
         }
     }
 
-    private void vibrateWhile(int restrictCount){
-        for(int i = 0; i < restrictCount; i++){
+    private void vibrateWhile(int restrictCount) {
+        for (int i = 0; i < restrictCount; i++) {
             Basic.setTimeout(new Runnable() {
                 public void run() {
                     miband.startVibration(VibrationMode.VIBRATION_WITH_LED);
@@ -173,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Subscribe
     public void onUserDataMove(User user) {
         this.userData = user;
-        // clear and refresh
+        messages.clear();
         messages.addAll(user.getObservables());
         mAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
@@ -216,11 +222,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         EventBus.getDefault().unregister(this);
     }
 
-    private void testGoogleSignInInit(){
+    private void testGoogleSignInInit() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-       this.mGoogleApiClient = new GoogleApiClient.Builder(this)
+        this.mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();

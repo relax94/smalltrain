@@ -97,8 +97,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
         // displaying text view data
         holder.from.setText(point.getLabel());
-        holder.subject.setText(point.getLabel());
-        holder.message.setText(point.getLabel());
+     //   holder.subject.setText(point.getLabel());
+      //  holder.message.setText(point.getLabel());
         //holder.timestamp.setText(message.getTimestamp());
 
         // displaying the first letter of From in icon text
@@ -214,13 +214,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     }
 
     private void applyImportant(MyViewHolder holder, ObservablePoint message) {
-/*        if (message.isImportant()) {
-            holder.iconImp.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_black_24dp));
-            holder.iconImp.setColorFilter(ContextCompat.getColor(mContext, R.color.icon_tint_selected));
-        } else {*/
+        if (message.isActive()) {
+          //  holder.iconImp.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_black_24dp));
+          //  holder.iconImp.setColorFilter(ContextCompat.getColor(mContext, R.color.icon_tint_selected));
+            holder.timestamp.setText("Active");
+        } else {
            // holder.iconImp.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_star_border_black_24dp));
-           // holder.iconImp.setColorFilter(ContextCompat.getColor(mContext, R.color.icon_tint_normal));
-       // }
+            holder.iconImp.setColorFilter(ContextCompat.getColor(mContext, R.color.icon_tint_normal));
+        }
     }
 
     private void applyReadStatus(MyViewHolder holder, ObservablePoint message) {
