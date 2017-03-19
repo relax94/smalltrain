@@ -42,12 +42,15 @@ export class DozorObservablePoint extends Component {
                     <div className="card-block">
                         <div className="row">
                             <div className="col-md-4">
-                                <input placeholder="Point Label" type="text" name="label" className="form-control"
+                                <input placeholder="Point Label" type="text" name="label"
+                                       value={item.label}
+                                       className="form-control"
                                        onChange={::this.handlePointDetailsChanges}/>
                             </div>
                             <div className="col-md-4">
                                 <input placeholder="Vibration Duration" type="text" name="duration"
                                        className="form-control"
+                                       value={item.duration}
                                        onChange={::this.handlePointDetailsChanges}/>
                             </div>
                             <div className="col-md-2">
